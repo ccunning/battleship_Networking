@@ -32,7 +32,7 @@
 #include <vector>
 using namespace std;
 
-#define NCMDS	14
+#define NCMDS	13
 
 enum Cmd_t { //Enumeration to allow easier access to commands from string array
 	CMDERR = -1,

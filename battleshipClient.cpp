@@ -8,42 +8,53 @@
 #include "player.h"
 using namespace std;
 
-
-#define GRID_TOP		"    _______________________________________\n  /|_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9_|_10|\\\n"
-#define A_ROW			" |_|                                       |\\\n |A|"
-#define B_ROW			" |_|                                       |\\\n |B|"
-#define C_ROW			" |_|                                       |\\\n |C|"
-#define D_ROW			" |_|                                       |\\\n |D|"
-#define E_ROW			" |_|                                       |\\\n |E|"
-#define F_ROW			" |_|                                       |\\\n |F|"
-#define G_ROW			" |_|                                       |\\\n |G|"
-#define H_ROW			" |_|                                       |\\\n |H|"
-#define I_ROW			" |_|                                       |\\\n |I|"
-#define J_ROW			" |_|                                       |\\\n |J|"
-#define GRID_BOTTOM		"  \\|_______________________________________|\\\n    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n\n"
-#define NOSHIP			" - "
-#define END_ROW			"|\\\n"
+#define NONHOSTPORT	6683
 #define HIT				" X "
 #define SHIP			" # "
 #define MISS			" O "
 
 
-/** Displays the Battleship menu with basic command listing for startup */
+/* Displays the Battleship menu with basic command listing for startup */
 void displayMenu();
 
 void displayGrid();
 
+/* Calls the appropriate command function that is part of the Player class */
 void callCmd(vector<string>& cmd, Cmd_t& type, Player& p);
 
-int main() {			//KB
+int main() {
 	string in_str;
 	Cmd_t type;
 	CmdParser parser;
 	vector<string> cmd;
 	Player player;
+	char isHost;
+	int sockid;
+	sockaddr_in * my_addr, server_addr;
+	hostent *ptrh;
 
-	displayMenu(); //Display title screen and menu
-	cout << "> ";
+	displayMenu(); /* Display title screen and menu */
+	
+	/* Determine if client is host */
+	cout << "ARE YOU GOING TO HOST THIS GAME? (Y/N)\n> ";
+	cin.get(isHost);
+	isHost = toupper(isHost);
+	if(isHost == 'Y') {
+		/****************************
+		 *  CURT LISTEN FOR SERVER  * 
+		 ****************************/
+	}
+	else {
+		/****************************
+		 *  CURT CONNECT TO SERVER  *
+		 ****************************/
+	}
+	
+	/* Get username */
+	isHost = 'Y';
+	while(isHost == 'Y') {
+		cout << "";
+	}
 
 	getline(cin,in_str);
 	type = parser.parse(in_str,cmd);
@@ -51,21 +62,18 @@ int main() {			//KB
 
 	/* NEED TO PARSE OUT INPUT use str.find()*/
 	/* CONNECT */
-	/* HOST*/
+	/* HOST */
 	/* DISPLAY HELP INFO */
 
 	return 0;
 }
 
-void displayMenu() { //KB
+void displayMenu() {
 
 	cout	<< "=================================================================\n"
 			<< "=         ___  ____ ___ ___ _    ____ ____ _  _ _ ___           =\n"
 			<< "=         |__] |__|  |   |  |    |___ [__  |__| | |__]          =\n"
 			<< "=         |__] |  |  |   |  |___ |___ ___] |  | | |             =\n"
-			<< "=================================================================\n"
-			<< "=================================================================\n"
-			<< "=  ARE YOU HOSTING THE GAME?                                    =\n"
 			<< "=================================================================\n\n";
 	return;
 }
@@ -82,7 +90,7 @@ void displayGrid() {
 		 << "|C|  -   -   -   -   -   -   -   -   -   -  |_|| |              | |\n"
 		 << "|-|                                         |_|| | - START      | |\n"
 		 << "|D|  -   -   -   -   -   -   -   -   -   -  |_|| | - CONNECT    | |\n"
-		 << "|-|                                         |_|| | - BEHOST     | |\n"
+		 << "|-|                                         |_|| | - COMMENT    | |\n"
 		 << "|E|  -   -   -   -   -   -   -   -   -   -  |_|| | - FIRE       | |\n"
 		 << "|-|                                         |_|| | - USE        | |\n"
 		 << "|F|  -   -   -   -   -   -   -   -   -   -  |_|| | - PLACE      | |\n"
@@ -105,12 +113,6 @@ void callCmd(vector<string>& cmd, Cmd_t& type, Player& p) {
 			break;
 		case CONNECT:
 			p.connect(cmd.at(1),cmd.at(2));
-			break;
-		case BEHOST:
-			p.behost(cmd.at(1));
-			break;
-		case OPTIONS:
-			p.options();
 			break;
 		case HELP:
 			p.help();
@@ -138,6 +140,13 @@ void callCmd(vector<string>& cmd, Cmd_t& type, Player& p) {
 			break;
 		case BUY:
 			p.buy(cmd.at(1));
+			break;
+		case COMMENT:
+			string message = "";
+			for(int i = 1; i < cmd.size(); i++) {
+				message += cmd.at(i) + " ";
+			}
+			p.comment(message);
 			break;
 		default:
 			break;

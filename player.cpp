@@ -10,40 +10,21 @@
 using namespace std;
 
 
-Player::Player() :	coins(0),					//KB
-					myTurn(false),
-					connected(false),
-					isHost(false),
-					shipsToPlace(5), 
-					shipsToSink(0), 
-					username("Player1"), 
-					wins(0), 
-					losses(0) {
+Player::Player(string& uname) : 	coins(0),		//KB
+											myTurn(false),
+											connected(false),
+											shipsToPlace(5), 
+											shipsToSink(0), 
+											username(uname), 
+											wins(0), 
+											losses(0) {
 	for(int i = 0; i < GRIDSIZE; i++) {
 		for(int j = 0; j < GRIDSIZE; j++) {
 			grid[i][j] = NULL;
 		}
 	}
 
-	WritePlayerInfo();
-}
-
-Player::Player(string& uname) : coins(0),		//KB
-								myTurn(false),
-								connected(false),
-								isHost(false),
-								shipsToPlace(5), 
-								shipsToSink(0), 
-								username(uname), 
-								wins(0), 
-								losses(0) {
-	for(int i = 0; i < GRIDSIZE; i++) {
-		for(int j = 0; j < GRIDSIZE; j++) {
-			grid[i][j] = NULL;
-		}
-	}
-
-	WritePlayerInfo();
+	GetPlayerInfo();
 }
 
 Player::~Player() {								//KB

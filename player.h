@@ -4,17 +4,17 @@
 #include <cstdio>
 #include <cstdlib>
 #include <sys/types.h>
-//#include <sys/socket.h>
-//#include <netinet/in.h>
-//#include <arpa/inet.h>
-//#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 #include <ctime>
 #include <cerrno>
 #include <string>
 #include <cctype>
 #include <cmath>
 #include <stddef.h>
-//#include <netdb.h>
+#include <netdb.h>
 #include <stack>
 #include <algorithm>
 #include <queue>
@@ -27,22 +27,20 @@ using namespace std;
 #define GRIDSIZE 			10
 
 
-class Player {			//KB
+class Player {			
 	Ship *	grid[GRIDSIZE][GRIDSIZE];
 	int		coins;
-	bool	myTurn;
-	bool	connected;
-	bool	isHost;
+	bool		myTurn;
+	bool		connected;
 	int		shipsToPlace;
 	int		shipsToSink;
 	int		wins;
 	int		losses;
 	string	username;
 
-	void	WritePlayerInfo();
+	void		GetPlayerInfo();
 	int		SinkShip();
 public:
-	Player();
 	Player(string& uname);
 	~Player();
 
@@ -58,8 +56,6 @@ public:
 			Returns -1 for error, function determines specific error */
 	void	start();
 	void	connect(string& ip, string& port);
-	void	behost(string& port);
-	void	options();
 	void	help();
 	void	stats();
 	void	quit();
@@ -69,6 +65,7 @@ public:
 	void	place(string& id, string& x, string& y, string& pos);
 	void	show(string& toShow);
 	void	buy(string& sid);
+	void comment(string& message);
 };
 
 #endif
