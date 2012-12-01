@@ -1,6 +1,8 @@
 //This class allows for easy transmition and parsing of the protocol
 //CC
 
+This is a test
+
 #ifndef BATSHPPRT
 #define BATSHPPRT
  
