@@ -128,13 +128,6 @@ int main() {
 		
 		cout <<"Waiting for players..." <<endl;
 		
-		commTemp.setCommand(8,0,0);
-		buf = commTemp.outputComm();
-		if(write(sockid, buf.c_str(), strlen(buf.c_str())) < 0)
-		{
-			cerr <<"write error" <<endl;
-			exit(EXIT_FAILURE);
-		}
 		
 		bzero(buffer, sizeof(buffer));
 		if(read(sockid, buffer, MAXSIZE) < 0)
@@ -147,6 +140,15 @@ int main() {
 		commTemp.inputComm(buf);
 		
 		cout <<"TESTING SERVER: " <<commTemp.outputComm() <<endl;
+		
+		commTemp.setCommand(8,0,0);
+		
+		buf = commTemp.outputComm();
+		if(write(sockid, buf.c_str(), strlen(buf.c_str())) < 0)
+		{
+			cerr <<"write error" <<endl;
+			exit(EXIT_FAILURE);
+		}
 		
 		/****************************
 		 *  CURT LISTEN FOR SERVER  * 
@@ -210,14 +212,6 @@ int main() {
 			exit(EXIT_FAILURE);
 		}
 		
-		commTemp.setCommand(8,0,0);
-		buf = commTemp.outputComm();
-		if(write(sockid, buf.c_str(), strlen(buf.c_str())) < 0)
-		{
-			cerr <<"write error" <<endl;
-			exit(EXIT_FAILURE);
-		}
-		
 		bzero(buffer, sizeof(buffer));
 		if(read(sockid, buffer, MAXSIZE) < 0)
 		{
@@ -229,6 +223,14 @@ int main() {
 		commTemp.inputComm(buf);
 		
 		cout <<"TESTING SERVER: " <<commTemp.outputComm() <<endl;
+		
+		commTemp.setCommand(8,0,0);
+		buf = commTemp.outputComm();
+		if(write(sockid, buf.c_str(), strlen(buf.c_str())) < 0)
+		{
+			cerr <<"write error" <<endl;
+			exit(EXIT_FAILURE);
+		}
 		
 		/****************************
 		 *  CURT CONNECT TO SERVER  *
