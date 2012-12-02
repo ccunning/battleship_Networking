@@ -6,10 +6,22 @@
 #include "cmdparser.h"
 #include "ship.h"
 #include "player.h"
+#include "battleshipprotocol.h"
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <wait.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <string.h>
+
 using namespace std;
 
 
-#define NONHOSTPORT	6683
+#define PORTNUMBER	6683
+#define MAXSIZE 128
 
 
 /* Displays the Battleship menu with basic command listing for startup */
@@ -21,14 +33,18 @@ void displayGrid();
 void callCmd(vector<string>& cmd, Cmd_t& type, Player& p);
 
 int main() {
-	string in_str, uname;
+	string in_str, uname, buf;
 	Cmd_t type;
 	CmdParser parser;
 	vector<string> cmd;
 	char isHost;
 	int sockid;
-	sockaddr_in * my_addr, server_addr;
+	struct sockaddr_in my_addr, server_addr;
 	hostent *ptrh;
+	
+	BaShPr commTemp;
+	
+	char buffer[MAXSIZE];
 
 	displayMenu(); /* Display title screen and menu */
 	
@@ -38,11 +54,182 @@ int main() {
 	cin.ignore (80, '\n');
 	isHost = toupper(isHost);
 	if(isHost == 'Y') {
+		
+		//CC
+		pid_t pid, pid2;
+		int Stat;
+		socklen_t alen;
+		
+		int sockid2;
+		
+		pid = fork();
+		
+		if(pid < 0)
+		{
+			cerr <<"Fork Failed" <<endl;
+			exit(EXIT_FAILURE);
+		}
+		if(pid == 0)
+		{
+			pid2 = fork();
+			
+			if(pid2 < 0)
+			{
+				cerr <<"2nd Fork failed" <<endl;
+				exit(EXIT_FAILURE);
+			}
+			if(pid2 == 0)
+			{
+				execvp("./Server", NULL);
+				cerr <<"Server didn't start" <<endl;
+				exit(EXIT_FAILURE);
+			}
+			else
+			{
+				exit(0);
+			}
+		}
+		else
+		{
+			waitpid(pid, &Stat, 0);
+		}
+		
+		/* initialize my_addr if host*/
+		memset((char *)&my_addr,0,sizeof(my_addr));
+		my_addr.sin_family = AF_INET;
+		my_addr.sin_addr.s_addr = INADDR_ANY;
+		my_addr.sin_port = htons((u_short)PORTNUMBER);
+		
+		sockid2 = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+		if(sockid2 < 0)
+		{
+			cerr <<"socket creation" <<endl;
+			exit(EXIT_FAILURE);
+		}
+		
+		if(bind(sockid2, (struct sockaddr *)&my_addr, sizeof(my_addr)) < 0)
+		{
+			cerr <<"bind" <<endl;
+			exit(EXIT_FAILURE);
+		}
+		
+		cout <<"Waiting for server to connect..." <<endl;
+		listen(sockid2, 1);
+		
+		alen = sizeof(server_addr);
+		
+		sockid = accept(sockid2, (struct sockaddr *) &server_addr, &alen);
+		
+		if(sockid < 0)
+		{
+			cerr <<"accept server conneciton" <<endl;
+			exit(EXIT_FAILURE);
+		}
+		
+		cout <<"Waiting for players..." <<endl;
+		
+		commTemp.setCommand(8,0,0);
+		buf = commTemp.outputComm();
+		if(write(sockid, buf.c_str(), strlen(buf.c_str())) < 0)
+		{
+			cerr <<"write error" <<endl;
+			exit(EXIT_FAILURE);
+		}
+		
+		bzero(buffer, sizeof(buffer));
+		if(read(sockid, buffer, MAXSIZE) < 0)
+		{
+			cerr <<"read error" <<endl;
+			exit(EXIT_FAILURE);
+		}
+		buf = buffer;
+		
+		commTemp.inputComm(buf);
+		
+		cout <<"TESTING SERVER: " <<commTemp.outputComm() <<endl;
+		
 		/****************************
 		 *  CURT LISTEN FOR SERVER  * 
 		 ****************************/
+		 
+		 
 	}
 	else {
+		char *host;
+		string ipAddress;
+		
+		cout <<"Please enter in the IP address: ";
+		getline(cin, ipAddress, '\n');
+		
+		/* initialize my_addr if connecting*/
+		memset((char *)&my_addr,0,sizeof(my_addr));
+		my_addr.sin_family = AF_INET;
+		my_addr.sin_addr.s_addr = INADDR_ANY;
+		my_addr.sin_port = htons((u_short)0);
+		
+		/* initialize server_addr if connecting*/
+		memset((char *)server_addr.sin_zero,0,sizeof(server_addr.sin_zero));
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_port = htons((u_short)PORTNUMBER);
+		
+		if (!ipAddress.empty())
+		{
+			strcpy(host,ipAddress.c_str());
+		}
+		else
+		{
+			ipAddress = "localhost";
+			strcpy(host,ipAddress.c_str());
+		}
+		
+		if((ptrh=gethostbyname(host))==0){
+			fprintf(stderr,"invalid host: %s\n", host);
+			exit(1);
+		}
+		memcpy(&server_addr.sin_addr, ptrh->h_addr, ptrh->h_length);
+		
+		/*creating socket if connecting*/
+		sockid = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+		if (sockid < 0)
+		{
+			perror("socket creation");
+			exit(EXIT_FAILURE);
+		}
+		 
+		/* Bind to local address if connecting*/
+		if (bind(sockid, (struct sockaddr *)&my_addr, sizeof(my_addr)) < 0)
+		{
+			perror("bind");
+			exit(EXIT_FAILURE);
+		}
+	 
+		/*Connect to the server if connecting*/
+		if (connect(sockid, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+		{
+			perror("connect");
+			exit(EXIT_FAILURE);
+		}
+		
+		commTemp.setCommand(8,0,0);
+		buf = commTemp.outputComm();
+		if(write(sockid, buf.c_str(), strlen(buf.c_str())) < 0)
+		{
+			cerr <<"write error" <<endl;
+			exit(EXIT_FAILURE);
+		}
+		
+		bzero(buffer, sizeof(buffer));
+		if(read(sockid, buffer, MAXSIZE) < 0)
+		{
+			cerr <<"read error" <<endl;
+			exit(EXIT_FAILURE);
+		}
+		buf = buffer;
+		
+		commTemp.inputComm(buf);
+		
+		cout <<"TESTING SERVER: " <<commTemp.outputComm() <<endl;
+		
 		/****************************
 		 *  CURT CONNECT TO SERVER  *
 		 ****************************/
