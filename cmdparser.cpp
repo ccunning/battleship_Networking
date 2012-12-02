@@ -45,73 +45,73 @@ Cmd_t CmdParser::parse(string& input, vector<string>& args) {
 	switch(j) {
 		case 0:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: start: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: start: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return START;
 		case 1:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: connect: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: connect: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return CONNECT;
 		case 2:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: help: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: help: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return HELP;
 		case 3:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: stats: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: stats: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return STATS;
 		case 4:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: quit: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: quit: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return QUIT;
 		case 5:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: fire: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: fire: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return FIRE;
 		case 6:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: use: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: use: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return USE;
 		case 7:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: unlock: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: unlock: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return UNLOCK;
 		case 8:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: place: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: place: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return PLACE;
 		case 9:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: show: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: show: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return SHOW;
 		case 10:
 			if( args.size() != (commands.nargs[j]+1) ) {
-				printf("ERROR: buy: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+				printf("ERROR: buy: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return BUY;
 		case 11:
-		`	if( args.size() == 0) {
-				printf("ERROR: comment: arguments given (%d) arguments needed (%d)\n", args.size()-1, commands.nargs[j]);
+			if( args.size() == 0) {
+				printf("ERROR: comment: arguments given (%d) arguments needed (%d)\n", (int)args.size()-1, (int)commands.nargs[j]);
 				return CMDERR;
 			}
 			return COMMENT;

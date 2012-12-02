@@ -1,21 +1,22 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <cstdio>
-#include <cstdlib>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <ctime>
-#include <cerrno>
+#include <time.h>
+#include <errno.h>
 #include <string>
-#include <cctype>
-#include <cmath>
+#include <ctype.h>
+#include <math.h>
 #include <stddef.h>
 #include <netdb.h>
 #include <stack>
+#include <string>
 #include <algorithm>
 #include <queue>
 #include <list>
@@ -30,17 +31,19 @@ using namespace std;
 class Player {			
 	Ship *	grid[GRIDSIZE][GRIDSIZE];
 	int		coins;
-	bool		myTurn;
-	bool		connected;
+	bool	myTurn;
+	bool	connected;
 	int		shipsToPlace;
 	int		shipsToSink;
+	string	username;
 	int		wins;
 	int		losses;
-	string	username;
 
-	void		GetPlayerInfo();
+	void	GetPlayerInfo();
 	int		SinkShip();
+
 public:
+	Player();
 	Player(string& uname);
 	~Player();
 
@@ -65,7 +68,7 @@ public:
 	void	place(string& id, string& x, string& y, string& pos);
 	void	show(string& toShow);
 	void	buy(string& sid);
-	void comment(string& message);
+	void	comment(string& message);
 };
 
 #endif

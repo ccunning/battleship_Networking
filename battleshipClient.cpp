@@ -23,11 +23,10 @@ void displayGrid();
 void callCmd(vector<string>& cmd, Cmd_t& type, Player& p);
 
 int main() {
-	string in_str;
+	string in_str, uname;
 	Cmd_t type;
 	CmdParser parser;
 	vector<string> cmd;
-	Player player;
 	char isHost;
 	int sockid;
 	sockaddr_in * my_addr, server_addr;
@@ -51,10 +50,15 @@ int main() {
 	}
 	
 	/* Get username */
-	isHost = 'Y';
-	while(isHost == 'Y') {
-		cout << "";
+	uname = "";
+	cout << "Enter your username(previous or new): ";
+	cin >> uname;
+	while(uname.length() < 1) {
+		cout << "Enter your username(previous or new): ";
+		cin >> uname;
 	}
+	
+	Player player(uname);
 
 	getline(cin,in_str);
 	type = parser.parse(in_str,cmd);
@@ -107,25 +111,21 @@ void displayGrid() {
 }
 
 void callCmd(vector<string>& cmd, Cmd_t& type, Player& p) {
-	switch(type) {
-		case START:
-			p.start();
-			break;
-		case CONNECT:
-			p.connect(cmd.at(1),cmd.at(2));
-			break;
-		case HELP:
-			p.help();
-			break;
-		case STATS:
-			p.stats();
-			break;
-		case QUIT:
-			p.quit();
-			break;
-		case FIRE:
-			p.fire(cmd.at(1),cmd.at(2));
-			break;
+	if(type == START)
+		p.start();
+	else if(type == CONNECT)
+		p.connect(cmd.at(1),cmd.at(2));
+	else if(type == HELP)
+		p.help();
+	else if(type == STATS)
+		p.stats();
+	else if(type == QUIT)
+		p.quit();
+	else if(type == FIRE)
+		p.fire(cmd.at(1),cmd.at(2));
+		/*
+
+
 		case USE:
 			p.use(cmd.at(1));
 			break;
@@ -148,7 +148,8 @@ void callCmd(vector<string>& cmd, Cmd_t& type, Player& p) {
 			}
 			p.comment(message);
 			break;
+		case CMDERR
 		default:
 			break;
-	};
+	};*/
 }

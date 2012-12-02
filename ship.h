@@ -1,3 +1,12 @@
+/**********************************************************************
+ * 
+ * PROJECT: BATTLESHIP
+ * AUTHORS: KENNETH BOGNER
+ * 			CURT CUNNING
+ * CREATED: NOVEMBER 2012
+ * 
+ **********************************************************************/
+
 #ifndef SHIP_H
 #define SHIP_H
 
@@ -8,7 +17,7 @@
 #define PATROLBOAT			2
 
 
-class Ship {	//KB
+class Ship {	
 	bool isHit;
 
 public:
@@ -22,7 +31,7 @@ protected:
 	virtual void DecreaseInstance() = 0;
 };
 
-class AircraftCarrier : public Ship {	//KB
+class AircraftCarrier : public Ship {	
 	static int maxInstances;
 
 public:
@@ -36,7 +45,7 @@ protected:
 	virtual void DecreaseInstance();
 };
 
-class Battleship : public Ship {		//KB
+class Battleship : public Ship {	
 	static int maxInstances;
 
 public:
@@ -50,7 +59,7 @@ protected:
 	virtual void DecreaseInstance();
 };
 
-class Cruiser : public Ship {			//KB
+class Cruiser : public Ship {		
 	static int maxInstances;
 
 public:
@@ -64,7 +73,7 @@ protected:
 	virtual void DecreaseInstance();
 };
 
-class Submarine : public Ship {			//KB
+class Submarine : public Ship {		
 	static int maxInstances;
 
 public:
@@ -78,7 +87,7 @@ protected:
 	virtual void DecreaseInstance();
 };
 
-class PatrolBoat : public Ship {		//KB
+class PatrolBoat : public Ship {
 	static int maxInstances;
 
 public:

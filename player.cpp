@@ -10,14 +10,31 @@
 using namespace std;
 
 
-Player::Player(string& uname) : 	coins(0),		//KB
-											myTurn(false),
-											connected(false),
-											shipsToPlace(5), 
-											shipsToSink(0), 
-											username(uname), 
-											wins(0), 
-											losses(0) {
+Player::Player():	coins(0),
+					myTurn(false),
+					connected(false),
+					shipsToPlace(5),
+					shipsToSink(0),
+					username("Captain"),
+					wins(0),
+					losses(0) {
+	for(int i = 0; i < GRIDSIZE; i++) {
+		for(int j = 0; j < GRIDSIZE; j++) {
+			grid[i][j] = NULL;
+		}
+	}
+
+	GetPlayerInfo();				
+}
+
+Player::Player(string& uname) : coins(0),
+								myTurn(false),
+								connected(false),
+								shipsToPlace(5), 
+								shipsToSink(0), 
+								username(uname), 
+								wins(0), 
+								losses(0) {
 	for(int i = 0; i < GRIDSIZE; i++) {
 		for(int j = 0; j < GRIDSIZE; j++) {
 			grid[i][j] = NULL;
@@ -27,12 +44,12 @@ Player::Player(string& uname) : 	coins(0),		//KB
 	GetPlayerInfo();
 }
 
-Player::~Player() {								//KB
+Player::~Player() {								
 	/* File structure: WINS,LOSSES,NUM_COINS */
 	fstream fsout;
 	string filename = username + ".txt";
 
-	fsout.open(filename.c_str(), fstream::out, fstream::trunc);
+	fsout.open(filename.c_str(), fstream::out | fstream::trunc);
 	if(fsout.fail()) {
 		printf("ERROR: Cannot open %s\n",filename.c_str());
 		exit(1);
@@ -45,27 +62,27 @@ Player::~Player() {								//KB
 	fsout.close();
 }
 
-int Player::Coins() const {						//KB
+int Player::Coins() const {						
 	return coins;
 }
 
-int Player::Wins() const {						//KB
+int Player::Wins() const {						
 	return wins;
 }
 
-int Player::Losses() const {					//KB
+int Player::Losses() const {
 	return losses;
 }
 
-string	Player::Username() const {				//KB
+string	Player::Username() const {
 	return username;
 }
 
-int Player::IsItMyTurn() const {				//KB
+int Player::IsItMyTurn() const {
 	return myTurn;	
 }
 
-int Player::RemainingShips() const {			//KB
+int Player::RemainingShips() const {
 	if(shipsToPlace > 0) {	/* Returns the number of ships needed before starting */
 		return shipsToPlace;
 	}	
@@ -96,25 +113,6 @@ void Player::connect(string& ip, string& port) {//KB (incomplete)
 	else {
 		/* Need to connect */
 	}
-}
-
-void Player::behost(string& port) {				//KB (incomplete)
-	if(isHost) {
-		printf("You're already the host!\n");
-		return;
-	}
-
-	if(connected && !isHost) {
-		printf("You're already connected to a host! You cannot both be hosts!\n");
-		return;
-	}
-
-	/* Need to set up IP and connect to server and host server */
-}
-
-void Player::options() {								//KB (incomplete)
-	printf("Options are under construction\n");
-	return;
 }
 
 void Player::help() {									//KB (incomplete)
@@ -163,7 +161,11 @@ void Player::buy(string& sid) {							//KB (incomplete)
 	printf("BUY SOMETHING\n");
 }
 
-void Player::WritePlayerInfo() {				//KB
+void Player::comment(string& message) {
+	printf("%s\n",message.c_str());
+}
+
+void Player::GetPlayerInfo() {	
 	/* File structure: WINS,LOSSES,NUM_COINS */
 	fstream fsin;
 	string filename = username + ".txt";
@@ -173,7 +175,7 @@ void Player::WritePlayerInfo() {				//KB
 	if(fsin.fail()) {
 		fstream fsout;
 		
-		fsout.open(filename.c_str(), fstream::out, fstream::trunc);
+		fsout.open(filename.c_str(), fstream::out | fstream::trunc);
 		if(fsout.fail()) {
 			printf("ERROR: Cannot open %s\n",filename.c_str());
 			exit(1);
@@ -196,6 +198,6 @@ void Player::WritePlayerInfo() {				//KB
 	fsin.close();
 }
 
-int Player::SinkShip() {						//KB
+int Player::SinkShip() {
 	return shipsToSink--;
 }
