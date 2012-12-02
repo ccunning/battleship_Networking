@@ -9,7 +9,8 @@
 using namespace std;
 
 
-#define NONHOSTPORT	6683
+#define HOSTPORT	6683
+#define NONHOSTPORT	6684
 
 
 /* Displays the Battleship menu with basic command listing for startup */
@@ -37,10 +38,37 @@ int main() {
 	cin.get(isHost);
 	cin.ignore (80, '\n');
 	isHost = toupper(isHost);
+	
+	/** HOST CONNECTION/NON-HOST CONNECTION SECTION */
 	if(isHost == 'Y') {
-		/****************************
-		 *  CURT LISTEN FOR SERVER  * 
-		 ****************************/
+		/* Host client address and port */
+		memset((char *)&my_addr,0,sizeof(my_addr));
+		my_addr.sin_family = AF_INET;
+		my_addr.sin_addr.s_addr = INADDR_ANY;
+		my_addr.sin_port = htons((u_short)HOSTPORT);
+		
+		memset((char *)&server_addr,0,sizeof(server_addr));
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_port = htons((u_short)0);
+		
+		/* Socket Creation */
+		sockid = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+		if(sockid < 0) {
+			printf("ERROR: Socket creation\n");
+			exit(1);
+		}
+		
+		/* Bind local address to socket */
+		if(bind(sockid, (sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
+			printf("ERROR: Bind\n");
+			exit(1);
+		}
+		
+		/* Make the socket a listening socket */
+		if(listen(sockid) < 0) {
+			printf("ERROR: Listen\n");
+			exit(1);
+		}
 	}
 	else {
 		/****************************
@@ -64,9 +92,13 @@ int main() {
 		getline(cin,in_str);
 		type = parser.parse(in_str,cmd);
 		callCmd(cmd,type,player);
-		break;
+		
+		if(type == QUIT) {
+			break;
+		}
 	}
-
+	
+	close(sockid);
 	return 0;
 }
 
