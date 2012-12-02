@@ -30,3 +30,17 @@ the id_rsa.pub file. Add a title and add key.
 Then, go to the repository and get the url for the ssh connection. Just use that instead of any https connections.
 
 That should be it.
+
+-----------------
+
+Commands
+
+Start of Turn - (0,0,0)
+
+Fire - (1,Loc1,Loc2)
+
+End of turn - (2,0,0)
+
+Ready - (8,0,0)
+
+Quit - (9,0,0)

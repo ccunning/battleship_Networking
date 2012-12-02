@@ -41,6 +41,8 @@ Fire - (1,Loc1,Loc2)
 
 End of turn - (2,0,0)
 
+ACK - (7,0,0)
+
 Ready - (8,0,0)
 
 Quit - (9,0,0)

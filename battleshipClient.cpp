@@ -42,12 +42,14 @@
 using namespace std;
 
 
-#define HOSTPORT	6683
-#define NONHOSTPORT	6684
+//#define HOSTPORT	6683
+//#define NONHOSTPORT	6684
 
 #define PORTNUMBER	6683
+#define PORTNUMBER2 6684
 #define MAXSIZE 128
 
+char localhost[] = "localhost";
 
 /* Displays the Battleship menu with basic command listing for startup */
 void displayMenu();
@@ -197,7 +199,7 @@ int main() {
 		
 		cout <<"TESTING SERVER: " <<commTemp.outputComm() <<endl;
 		
-		commTemp.setCommand(8,0,0);
+		commTemp.setCommand(7,0,0);
 		
 		buf = commTemp.outputComm();
 		if(write(sockid, buf.c_str(), strlen(buf.c_str())) < 0)
@@ -212,10 +214,11 @@ int main() {
 	}
 	else {
 		char *host;
-		string ipAddress;
+		string inputAddress;
+		char ipAddress[MAXSIZE];
 		
 		cout <<"Please enter in the IP address: ";
-		getline(cin, ipAddress, '\n');
+		getline(cin, inputAddress, '\n');
 		
 		/* initialize my_addr if connecting*/
 		memset((char *)&my_addr,0,sizeof(my_addr));
@@ -226,16 +229,17 @@ int main() {
 		/* initialize server_addr if connecting*/
 		memset((char *)server_addr.sin_zero,0,sizeof(server_addr.sin_zero));
 		server_addr.sin_family = AF_INET;
-		server_addr.sin_port = htons((u_short)PORTNUMBER);
+		server_addr.sin_port = htons((u_short)PORTNUMBER2);
 		
-		if (!ipAddress.empty())
+		strcpy(ipAddress, inputAddress.c_str());
+		
+		if (!inputAddress.empty())
 		{
-			strcpy(host,ipAddress.c_str());
+			host = ipAddress;
 		}
 		else
 		{
-			ipAddress = "localhost";
-			strcpy(host,ipAddress.c_str());
+			host = localhost;
 		}
 		
 		if((ptrh=gethostbyname(host))==0){
@@ -278,7 +282,7 @@ int main() {
 		
 		cout <<"TESTING SERVER: " <<commTemp.outputComm() <<endl;
 		
-		commTemp.setCommand(8,0,0);
+		commTemp.setCommand(7,0,0);
 		buf = commTemp.outputComm();
 		if(write(sockid, buf.c_str(), strlen(buf.c_str())) < 0)
 		{
