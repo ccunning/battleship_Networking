@@ -1,3 +1,15 @@
+/**********************************************************************
+ * 
+ * PROJECT: BATTLESHIP
+ * AUTHORS: KENNETH BOGNER
+ * 			CURT CUNNING
+ * CREATED: NOVEMBER 2012
+ * 
+ **********************************************************************/
+
+#ifndef PLAYER_CPP
+#define PLAYER_CPP
+
 #include <iostream>
 #include <fstream>
 #include <cstdio>
@@ -12,7 +24,6 @@ using namespace std;
 
 Player::Player():	coins(0),
 					myTurn(false),
-					connected(false),
 					shipsToPlace(5),
 					shipsToSink(0),
 					username("Captain"),
@@ -29,7 +40,6 @@ Player::Player():	coins(0),
 
 Player::Player(string& uname) : coins(0),
 								myTurn(false),
-								connected(false),
 								shipsToPlace(5), 
 								shipsToSink(0), 
 								username(uname), 
@@ -90,13 +100,21 @@ int Player::RemainingShips() const {
 		return shipsToSink;
 	}
 }
-	
-void Player::start() {							//KB (incomplete)
-	if(!connected) {
-		printf("You're not connected! You must connect to a host to play!\n");
-		return;
+
+Ship* Player::GetContentAtCoords(int& x, int& y) {
+	if(x < 1 || x > GRIDSIZE) {
+		printf("ERROR: Your x coordinate must be between 1 and %d, not %d\n", GRIDSIZE, x);
+		return NULL;
+	}
+	if(y < 1 || y > GRIDSIZE) {
+		printf("ERROR: Your y coordinate must be between 1 and %d, not %d\n", GRIDSIZE, y);
+		return NULL;
 	}
 	
+	return grid[x-1][y-1];
+}
+	
+void Player::start() {							//KB (incomplete)
 	if(shipsToPlace > 0) {
 		printf("Game cannot start yet! You must place %d ships first!\n", shipsToPlace);
 		return;
@@ -106,13 +124,7 @@ void Player::start() {							//KB (incomplete)
 }
 
 void Player::connect(string& ip, string& port) {//KB (incomplete)
-	if(connected) {
-		printf("You're already connected! Cannot connect again!\n");
-		return;
-	}
-	else {
-		/* Need to connect */
-	}
+	printf("CONNECT");
 }
 
 void Player::help() {									//KB (incomplete)
@@ -121,7 +133,7 @@ void Player::help() {									//KB (incomplete)
 }
 
 void Player::stats() {									//KB
-	printf("%s STATS:\n- WINS:   %d\n- LOSSES: %d\n",username.c_str(),wins,losses);
+	printf("%s stats:\n- WINS:   %d\n- LOSSES: %d\n",username.c_str(),wins,losses);
 	return;
 }
 
@@ -201,3 +213,5 @@ void Player::GetPlayerInfo() {
 int Player::SinkShip() {
 	return shipsToSink--;
 }
+
+#endif

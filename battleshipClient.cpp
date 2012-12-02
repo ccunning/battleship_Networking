@@ -8,10 +8,8 @@
 #include "player.h"
 using namespace std;
 
+
 #define NONHOSTPORT	6683
-#define HIT				" X "
-#define SHIP			" # "
-#define MISS			" O "
 
 
 /* Displays the Battleship menu with basic command listing for startup */
@@ -37,6 +35,7 @@ int main() {
 	/* Determine if client is host */
 	cout << "ARE YOU GOING TO HOST THIS GAME? (Y/N)\n> ";
 	cin.get(isHost);
+	cin.ignore (80, '\n');
 	isHost = toupper(isHost);
 	if(isHost == 'Y') {
 		/****************************
@@ -52,22 +51,21 @@ int main() {
 	/* Get username */
 	uname = "";
 	cout << "Enter your username(previous or new): ";
-	cin >> uname;
+	getline(cin, uname);
 	while(uname.length() < 1) {
 		cout << "Enter your username(previous or new): ";
-		cin >> uname;
+		getline(cin, uname);
 	}
 	
-	Player player(uname);
+	Player player(uname); //Create player and initialize all components
 
-	getline(cin,in_str);
-	type = parser.parse(in_str,cmd);
-	callCmd(cmd,type,player);
-
-	/* NEED TO PARSE OUT INPUT use str.find()*/
-	/* CONNECT */
-	/* HOST */
-	/* DISPLAY HELP INFO */
+	while(1) {
+		cout << "> ";
+		getline(cin,in_str);
+		type = parser.parse(in_str,cmd);
+		callCmd(cmd,type,player);
+		break;
+	}
 
 	return 0;
 }
@@ -123,33 +121,22 @@ void callCmd(vector<string>& cmd, Cmd_t& type, Player& p) {
 		p.quit();
 	else if(type == FIRE)
 		p.fire(cmd.at(1),cmd.at(2));
-		/*
-
-
-		case USE:
-			p.use(cmd.at(1));
-			break;
-		case UNLOCK:
-			p.unlock(cmd.at(1));
-			break;
-		case PLACE:
-			p.place(cmd.at(1),cmd.at(2),cmd.at(3),cmd.at(4));
-			break;
-		case SHOW:
-			p.show(cmd.at(1));
-			break;
-		case BUY:
-			p.buy(cmd.at(1));
-			break;
-		case COMMENT:
-			string message = "";
-			for(int i = 1; i < cmd.size(); i++) {
-				message += cmd.at(i) + " ";
-			}
-			p.comment(message);
-			break;
-		case CMDERR
-		default:
-			break;
-	};*/
+	else if(type == USE)
+		p.use(cmd.at(1));
+	else if(type == UNLOCK)
+		p.unlock(cmd.at(1));
+	else if(type == PLACE)
+		p.place(cmd.at(1),cmd.at(2),cmd.at(3),cmd.at(4));
+	else if(type == SHOW)
+		p.show(cmd.at(1));
+	else if(type == BUY)
+		p.buy(cmd.at(1));
+	else if(type == COMMENT) {
+		string message = "";
+		for(unsigned int i = 1; i < cmd.size(); i++) {
+			message += cmd.at(i) + " ";
+		}
+		p.comment(message);
+	}
+	else {/* empty */}
 }

@@ -1,3 +1,12 @@
+/**********************************************************************
+ * 
+ * PROJECT: BATTLESHIP
+ * AUTHORS: KENNETH BOGNER
+ * 			CURT CUNNING
+ * CREATED: NOVEMBER 2012
+ * 
+ **********************************************************************/
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -25,14 +34,13 @@
 using namespace std;
 
 
-#define GRIDSIZE 			10
+#define GRIDSIZE 	10
 
 
 class Player {			
 	Ship *	grid[GRIDSIZE][GRIDSIZE];
 	int		coins;
 	bool	myTurn;
-	bool	connected;
 	int		shipsToPlace;
 	int		shipsToSink;
 	string	username;
@@ -53,6 +61,7 @@ public:
 	string	Username() const;
 	int		IsItMyTurn() const;
 	int		RemainingShips() const;
+	Ship*	GetContentAtCoords(int& x, int& y);
 	
 	/* Functions to handle the commands
 			Returns 0 for no error
