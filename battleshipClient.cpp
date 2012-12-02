@@ -55,7 +55,7 @@ void displayMenu();
 void displayGrid();
 
 /* Calls the appropriate command function that is part of the Player class */
-void callCmd(vector<string>& cmd, Cmd_t& type, Player& p);
+void callCmd(int& sd, vector<string>& cmd, Cmd_t& type, Player& p);
 
 int main() {
 	string in_str, uname, buf;
@@ -80,11 +80,9 @@ int main() {
 	
 	/** HOST CONNECTION/NON-HOST CONNECTION SECTION */
 	if(isHost == 'Y') {
-<<<<<<< HEAD
 		/* Host client address and port */
 		/** 
 		 *  I have commented out all that don't work 
-		 */
 		memset((char *)&my_addr,0,sizeof(my_addr)); 
 		my_addr.sin_family = AF_INET;
 		my_addr.sin_addr.s_addr = INADDR_ANY;
@@ -92,27 +90,26 @@ int main() {
 		
 		memset((char *)&server_addr,0,sizeof(server_addr));
 		server_addr.sin_family = AF_INET;
-		server_addr.sin_port = htons((u_short)0);
+		server_addr.sin_port = htons((u_short)0); */
 		
 		/* Socket Creation */
-		sockid = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+		/* sockid = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
 		if(sockid < 0) {
 			printf("ERROR: Socket creation\n");
 			exit(1);
-		}
+		}*/
 		
 		/* Bind local address to socket */
-		if(bind(sockid, (sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
+		/*if(bind(sockid, (sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
 			printf("ERROR: Bind\n");
 			exit(1);
-		}
+		}*/
 		
 		/* Make the socket a listening socket */
-		if(listen(sockid,1) < 0) {
+		/*if(listen(sockid,1) < 0) {
 			printf("ERROR: Listen\n");
 			exit(1);
-		}
-=======
+		}*/
 		
 		//CC
 		pid_t pid, pid2;
@@ -212,9 +209,6 @@ int main() {
 		/****************************
 		 *  CURT LISTEN FOR SERVER  * 
 		 ****************************/
-		 
-		 
->>>>>>> 97129eceb438a1bc153c17d1cb34ccc614d204b4
 	}
 	else {
 		char *host;
@@ -361,9 +355,9 @@ void displayGrid() {
 		 << "   \\_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_/\n";
 }
 
-void callCmd(vector<string>& cmd, Cmd_t& type, Player& p) {
+void callCmd(int& sd, vector<string>& cmd, Cmd_t& type, Player& p) {
 	if(type == START)
-		p.start();
+		p.start(sd);
 	else if(type == CONNECT)
 		p.connect(cmd.at(1),cmd.at(2));
 	else if(type == HELP)
@@ -373,7 +367,7 @@ void callCmd(vector<string>& cmd, Cmd_t& type, Player& p) {
 	else if(type == QUIT)
 		p.quit();
 	else if(type == FIRE)
-		p.fire(cmd.at(1),cmd.at(2));
+		p.fire(sd,cmd.at(1),cmd.at(2));
 	else if(type == USE)
 		p.use(cmd.at(1));
 	else if(type == UNLOCK)
@@ -389,7 +383,7 @@ void callCmd(vector<string>& cmd, Cmd_t& type, Player& p) {
 		for(unsigned int i = 1; i < cmd.size(); i++) {
 			message += cmd.at(i) + " ";
 		}
-		p.comment(message);
+		p.comment(sd,message);
 	}
 	else {/* empty */}
 }

@@ -25,13 +25,15 @@ using namespace std;
 Player::Player():	coins(0),
 					myTurn(false),
 					shipsToPlace(5),
-					shipsToSink(0),
+					shipsToSink(5),
+					shipsRemaining(0),
 					username("Captain"),
 					wins(0),
 					losses(0) {
 	for(int i = 0; i < GRIDSIZE; i++) {
 		for(int j = 0; j < GRIDSIZE; j++) {
-			grid[i][j] = NULL;
+			myGrid[i][j] = NULL;
+			theirGrid[i][j] = NULL;
 		}
 	}
 
@@ -41,13 +43,15 @@ Player::Player():	coins(0),
 Player::Player(string& uname) : coins(0),
 								myTurn(false),
 								shipsToPlace(5), 
-								shipsToSink(0), 
+								shipsToSink(5), 
+								shipsRemaining(0),
 								username(uname), 
 								wins(0), 
 								losses(0) {
 	for(int i = 0; i < GRIDSIZE; i++) {
 		for(int j = 0; j < GRIDSIZE; j++) {
-			grid[i][j] = NULL;
+			myGrid[i][j] = NULL;
+			theirGrid[i][j] = NULL;
 		}
 	}
 
@@ -92,29 +96,46 @@ int Player::IsItMyTurn() const {
 	return myTurn;	
 }
 
-int Player::RemainingShips() const {
+int Player::MyRemainingShips() const {
 	if(shipsToPlace > 0) {	/* Returns the number of ships needed before starting */
 		return shipsToPlace;
 	}	
 	else {					/* Returns the number of ships that are still not sunk */							
-		return shipsToSink;
+		return shipsRemaining;
 	}
 }
 
-Ship* Player::GetContentAtCoords(int& x, int& y) {
+int Player::TheirRemainingShips() const {
+	return shipsToSink;
+}
+
+Ship* Player::GetMyContentAtCoords(int& x, int& y) const {
 	if(x < 1 || x > GRIDSIZE) {
-		printf("ERROR: Your x coordinate must be between 1 and %d, not %d\n", GRIDSIZE, x);
+		printf("ERROR: The x coordinate must be between 1 and %d, not %d\n", GRIDSIZE, x);
 		return NULL;
 	}
 	if(y < 1 || y > GRIDSIZE) {
-		printf("ERROR: Your y coordinate must be between 1 and %d, not %d\n", GRIDSIZE, y);
+		printf("ERROR: The y coordinate must be between 1 and %d, not %d\n", GRIDSIZE, y);
 		return NULL;
 	}
 	
-	return grid[x-1][y-1];
+	return myGrid[x-1][y-1];
+}
+
+Ship* Player::GetTheirContentAtCoords(int& x, int& y) const {
+	if(x < 1 || x > GRIDSIZE) {
+		printf("ERROR: The x coordinate must be between 1 and %d, not %d\n", GRIDSIZE, x);
+		return NULL;
+	}
+	if(y < 1 || y > GRIDSIZE) {
+		printf("ERROR: The y coordinate must be between 1 and %d, not %d\n", GRIDSIZE, y);
+		return NULL;
+	}
+	
+	return theirGrid[x-1][y-1];
 }
 	
-void Player::start() {							//KB (incomplete)
+void Player::start(int& sd) {							//KB (incomplete)
 	if(shipsToPlace > 0) {
 		printf("Game cannot start yet! You must place %d ships first!\n", shipsToPlace);
 		return;
@@ -123,7 +144,7 @@ void Player::start() {							//KB (incomplete)
 	/* Send start packet */
 }
 
-void Player::connect(string& ip, string& port) {//KB (incomplete)
+void Player::connect(string& ip, string& port) {	//KB (incomplete)possibly unnecessary
 	printf("CONNECT");
 }
 
@@ -137,14 +158,12 @@ void Player::stats() {									//KB
 	return;
 }
 
-void Player::quit() {									//KB (incomplete)
+void Player::quit() {									//KB
 	printf("Disconnecting...\n");
-	/* Disconnect from server if not host
-	   Send close packet to clients and then disconnect host */
 	return;
 }
 
-void Player::fire(string& x, string& y) {				//KB (incomplete)
+void Player::fire(int& sd, string& x, string& y) {				//KB (incomplete)
 	printf("ATTACK!\n");
 	/* BEGIN 
 		FIRE 
@@ -166,14 +185,24 @@ void Player::place(string& id, string& x, string&y, string& pos) {		//KB (incomp
 }
 
 void Player::show(string& toShow) {						//KB (incomplete)
-	printf("SHOW SOMETHING\n");
+	if(toShow.compare("mine")) {
+		return;
+	}
+	if(toShow.compare("opp")) {
+		return;
+	}
+	if(toShow.compare("store")) {
+		return;
+	}
+	
+	printf("You must type mine, opp, or store to display");
 }
 
 void Player::buy(string& sid) {							//KB (incomplete)
 	printf("BUY SOMETHING\n");
 }
 
-void Player::comment(string& message) {
+void Player::comment(int& sd, string& message) {
 	printf("%s\n",message.c_str());
 }
 
@@ -211,7 +240,7 @@ void Player::GetPlayerInfo() {
 }
 
 int Player::SinkShip() {
-	return shipsToSink--;
+	return shipsRemaining--;
 }
 
 #endif

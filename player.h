@@ -38,11 +38,13 @@ using namespace std;
 
 
 class Player {			
-	Ship *	grid[GRIDSIZE][GRIDSIZE];
+	Ship *	myGrid[GRIDSIZE][GRIDSIZE];
+	Ship *	theirGrid
 	int		coins;
 	bool	myTurn;
 	int		shipsToPlace;
 	int		shipsToSink;
+	int		shipsRemaining;
 	string	username;
 	int		wins;
 	int		losses;
@@ -60,24 +62,26 @@ public:
 	int		Losses() const;
 	string	Username() const;
 	int		IsItMyTurn() const;
-	int		RemainingShips() const;
-	Ship*	GetContentAtCoords(int& x, int& y);
+	int		MyRemainingShips() const;
+	int		TheirRemainingShips() const;
+	Ship*	GetMyContentAtCoords(int& x, int& y) const;
+	Ship*	GetTheirContentAtCoords(int& x, int& y) const;
 	
 	/* Functions to handle the commands
 			Returns 0 for no error
 			Returns -1 for error, function determines specific error */
-	void	start();
+	void	start(int& sd);
 	void	connect(string& ip, string& port);
 	void	help();
 	void	stats();
 	void	quit();
-	void	fire(string& x, string& y);
+	void	fire(int& sd, string& x, string& y);
 	void	use(string& sid);
 	void	unlock(string& sid);
 	void	place(string& id, string& x, string& y, string& pos);
 	void	show(string& toShow);
 	void	buy(string& sid);
-	void	comment(string& message);
+	void	comment(int& sd, string& message);
 };
 
 #endif
