@@ -1,6 +1,28 @@
+/**********************************************************************
+ * 
+ * PROJECT: BATTLESHIP
+ * AUTHORS: KENNETH BOGNER
+ * 			CURT CUNNING
+ * CREATED: NOVEMBER 2012
+ * 
+ **********************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <cstring>
+#include <unistd.h>
+#include <time.h>
+#include <errno.h>
+#include <string>
+#include <ctype.h>
+#include <math.h>
+#include <stddef.h>
+#include <netdb.h>
 #include <iostream>
-#include <cstdio>
-#include <cstdlib>
 #include <string>
 #include <vector>
 #include "cmdparser.h"
@@ -28,7 +50,7 @@ int main() {
 	vector<string> cmd;
 	char isHost;
 	int sockid;
-	sockaddr_in * my_addr, server_addr;
+	sockaddr_in my_addr, server_addr;
 	hostent *ptrh;
 
 	displayMenu(); /* Display title screen and menu */
@@ -42,7 +64,10 @@ int main() {
 	/** HOST CONNECTION/NON-HOST CONNECTION SECTION */
 	if(isHost == 'Y') {
 		/* Host client address and port */
-		memset((char *)&my_addr,0,sizeof(my_addr));
+		/** 
+		 *  I have commented out all that don't work 
+		 */
+		memset((char *)&my_addr,0,sizeof(my_addr)); 
 		my_addr.sin_family = AF_INET;
 		my_addr.sin_addr.s_addr = INADDR_ANY;
 		my_addr.sin_port = htons((u_short)HOSTPORT);
@@ -65,7 +90,7 @@ int main() {
 		}
 		
 		/* Make the socket a listening socket */
-		if(listen(sockid) < 0) {
+		if(listen(sockid,1) < 0) {
 			printf("ERROR: Listen\n");
 			exit(1);
 		}

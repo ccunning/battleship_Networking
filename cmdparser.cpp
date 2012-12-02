@@ -1,3 +1,12 @@
+/**********************************************************************
+ * 
+ * PROJECT: BATTLESHIP
+ * AUTHORS: KENNETH BOGNER
+ * 			CURT CUNNING
+ * CREATED: NOVEMBER 2012
+ * 
+ **********************************************************************/
+
 #ifndef CMDPARSER_CPP
 #define CMDPARSER_CPP
 
