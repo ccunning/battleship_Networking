@@ -152,6 +152,7 @@ int main()
 				{
 					kill(pid2, SIGKILL);
 					pTimeout = true;
+					waitpid(pid2);
 				}
 			}while(wpid == 0 && waittime <= TIMEOUT);
 		}
@@ -190,6 +191,7 @@ int main()
 				{
 					kill(pid2, SIGKILL);
 					pTimeout = true;
+					waitpid(pid2);
 				}
 			}while(wpid == 0 && waittime <= TIMEOUT);
 		}

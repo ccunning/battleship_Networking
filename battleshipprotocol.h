@@ -18,12 +18,12 @@
 
 using namespace std;
  
-enum Packet_t {
+/*enum Packet_t {
 	ACK = 0,
 	START,
 	FIRE,
 	QUIT
-};
+};*/
  
 class BaShPr //creates a class for the protocol commands
 {
