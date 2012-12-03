@@ -82,37 +82,6 @@ int main() {
 	
 	/** HOST CONNECTION/NON-HOST CONNECTION SECTION */
 	if(isHost == 'Y') {
-		/* Host client address and port */
-		/** 
-		 *  I have commented out all that don't work 
-		memset((char *)&my_addr,0,sizeof(my_addr)); 
-		my_addr.sin_family = AF_INET;
-		my_addr.sin_addr.s_addr = INADDR_ANY;
-		my_addr.sin_port = htons((u_short)HOSTPORT);
-		
-		memset((char *)&server_addr,0,sizeof(server_addr));
-		server_addr.sin_family = AF_INET;
-		server_addr.sin_port = htons((u_short)0); */
-		
-		/* Socket Creation */
-		/* sockid = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
-		if(sockid < 0) {
-			printf("ERROR: Socket creation\n");
-			exit(1);
-		}*/
-		
-		/* Bind local address to socket */
-		/*if(bind(sockid, (sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
-			printf("ERROR: Bind\n");
-			exit(1);
-		}*/
-		
-		/* Make the socket a listening socket */
-		/*if(listen(sockid,1) < 0) {
-			printf("ERROR: Listen\n");
-			exit(1);
-		}*/
-		
 		//CC
 		pid_t pid, pid2;
 		int Stat;
@@ -208,6 +177,7 @@ int main() {
 			exit(EXIT_FAILURE);
 		}
 		
+		close(sockid2);
 		/****************************
 		 *  CURT LISTEN FOR SERVER  * 
 		 ****************************/
@@ -310,7 +280,7 @@ int main() {
 		cout << "> ";
 		getline(cin,in_str);
 		type = parser.parse(in_str,cmd);
-		callCmd(cmd,type,player);
+		callCmd(sockid,cmd,type,player);
 		
 		if(type == QUIT) {
 			break;

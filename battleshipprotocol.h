@@ -36,6 +36,8 @@ public:
     
     string outputComm(void);
     void inputComm(const string & nBScomm);
+    
+    BaShPr& operator = (const BaShPr &nCommand);
 
 private:
     int command;
@@ -101,6 +103,20 @@ void BaShPr::inputComm(const string & nBScomm) //input the string into the objec
 	ss >> temp >> command >> temp >> option1 >> temp >> option2 >> temp;
 	
 	return;
+}
+
+BaShPr& BaShPr::operator = (const BaShPr &nCommand)
+{
+	if(this == &nCommand)
+	{
+		return *this;
+	}
+	
+	command = nCommand.command;
+	option1 = nCommand.option1;
+	option2 = nCommand.option2;
+	
+	return *this;
 }
 
 #endif
