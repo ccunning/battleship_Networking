@@ -43,7 +43,7 @@ End of turn - (2,0,0)
 
 Not Ready (6,0,0)
 
-ACK - (7,0,0)
+ACK - (7,0,0) or (7,Hit_or_Miss,0)
 
 Ready - (8,0,0)
 
